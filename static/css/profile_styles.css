@@ -1,0 +1,31 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* prevents whole page from scrolling */
+}
+.profile-sidebar {
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+}
+.profile-overview {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.profile-tabs {
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 1rem;
+}
+.profile-tabs .nav-link {
+  border: none;
+  border-radius: 0;
+}
+.badge-tag {
+  background-color: #00b3b3;
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.4em 0.7em;
+  margin: 0.2em;
+  border-radius: 1rem;
+  display: inline-block;
+}

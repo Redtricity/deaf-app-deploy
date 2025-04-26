@@ -1,0 +1,32 @@
+/* Navbar css */
+.navbar-top,
+.navbar-second {
+  position: fixed;
+}
+.navbar-light .navbar-nav .nav-link.active,
+.navbar-light .navbar-nav .nav-link.active:hover,
+.navbar-light .navbar-nav .nav-link.active:focus {
+  color: #007bff !important;
+  border-bottom: 2px solid #007bff !important;
+  background-color: transparent !important; 
+}
+
+/* Default link style */
+.nav-link {
+  color: #000; 
+  text-decoration: none;
+  transition: color 0.2s ease; 
+}
+
+/* Hover */
+.nav-link:hover {
+  color: #000; 
+  text-decoration: none; 
+}
+
+/* Active link  */
+.nav-link.active {
+  color: #007bff !important;        /* bootstrap primary blue*/
+  border-bottom: 2px solid #007bff !important; /* underline */
+}
+

@@ -1,0 +1,66 @@
+{% load crispy_forms_tags %} 
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/custom_styles.css' %}">
+    
+    <title>Login</title>
+</head>
+<body class="bg-light d-flex align-items-center" style="height: 100vh;">
+  <div class="container">
+    <h1 class="text-center mb-4 mt-n2">DeafAPP</h1>
+    <div class="row">
+
+      <!-- Left Column (sign vid)-->
+      <div class="col-md-6">
+        <div class="embed-responsive embed-responsive-16by9">
+          <video id="signerLogin" class="embed-responsive-item" muted playsinline>
+            <source src="https://lara-bsl-videos.s3.eu-north-1.amazonaws.com/videos/Login.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        
+      </div>
+
+      <!-- Right Column (Login Form) -->
+      <div class="col-md-6 col-lg-4">
+        <div class="card p-4 shadow-sm" id="login-form-card">
+
+          <form method="post" class="form">
+            {% csrf_token %}
+            {% crispy form %}
+          </form>
+
+          <div class="text-center mt-3">
+            <a href="{% url 'accounts:register' %}">Create Account</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const videoElement = document.getElementById('signerLogin');
+      const loginCard = document.querySelector('.card'); 
+    
+      if (loginCard && videoElement) {
+        loginCard.addEventListener('mouseenter', function() {
+          videoElement.play();
+        });
+    
+        loginCard.addEventListener('mouseleave', function() {
+          videoElement.pause();
+          videoElement.currentTime = 0; 
+        });
+      }
+    });
+    </script>
+</body>
+</html>

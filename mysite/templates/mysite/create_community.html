@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Create Community{% endblock %}
+{% block content %}
+<h2>Create a Community</h2>
+<form method="post" enctype="multipart/form-data" class="card p-4 shadow-sm">
+  {% csrf_token %}
+  <div class="mb-3">
+    <label for="id_name" class="form-label">Community Name</label>
+    <input type="text" name="name" class="form-control" id="id_name" placeholder="e.g. BSL Beginners" value="{{ form.name.value|default:'' }}">
+  </div>
+  <div class="mb-3">
+    <label for="id_description" class="form-label">Description</label>
+    <textarea name="description" class="form-control" id="id_description" placeholder="Tell us about your community..." rows="4">{{ form.description.value|default:'' }}</textarea>
+  </div>
+  <div class="mb-3 form-check">
+    <input type="checkbox" name="is_public" class="form-check-input" id="id_is_public" {% if form.is_public.value %}checked{% endif %}>
+    <label class="form-check-label" for="id_is_public">Is public?</label>
+  </div>
+  <div class="mb-3">
+    <label for="id_image" class="form-label">Community Image</label>
+    <input type="file" name="image" class="form-control" id="id_image">
+    <img id="preview" class="img-fluid mt-2 rounded" style="max-height: 150px; display: none;">
+  </div>
+  <button type="submit" class="btn btn-primary">Create Community</button>
+</form>
+
+<script>
+  const imageInput = document.getElementById('id_image');
+  const preview = document.getElementById('preview');
+
+  imageInput.addEventListener('change', function () {
+    const file = this.files[0];
+    if (file) {
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = 'block';
+    }
+  });
+</script>
+
+
+{% endblock %}

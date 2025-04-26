@@ -1,0 +1,93 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}DeafApp{% endblock %}</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  
+  {% block head %}{% endblock head %}
+</head>
+<body class="bg-light">
+  <!-- Top Bar -->
+  <nav class="navbar navbar-light bg-white border-bottom">
+      <div class="container-fluid">
+        <div class="d-flex w-100 align-items-center">
+          <span class="navbar-brand mb-0 h1 mr-3">DeafApp</span>
+          <form class="form-inline flex-grow-1 mx-3" action="{% url 'accounts:search_profiles' %}" method="GET">
+            <input class="form-control w-100" type="search" name="search_term" placeholder="Search users..." aria-label="Search">
+          </form>
+  
+          <ul class="navbar-nav flex-row">
+            <li class="nav-item mr-3">
+              <a class="nav-link" href="{% url 'accounts:notifications' %}">
+                <i class="fas fa-bell"></i> Notifications
+              </a>
+              {% if unread_notifications_count > 0 %}
+              <span class="notification-dot"></span>
+              {% endif %}
+
+              <!-- Debug-->
+              ({{ unread_notifications_count }})
+              {% if unread_notifications_count > 0 %}
+                <span class="notification-dot"></span>
+              {% endif %}
+            </li>
+          
+            <li class="nav-item ">
+              <a class="nav-link d-flex align-items-center" href="{% url 'accounts:profile' %}">
+                {% if user.is_authenticated and user.profile.profile_picture %}
+                  <img src="{{ user.profile.profile_picture.url }}" alt="User" height="36" width="36" class="rounded-circle mr-2" style="object-fit: cover; border: 1px solid #ccc;">
+                {% else %}
+                  <img src="{% static 'images/default_user.jpg' %}" alt="Default User" height="30" class="rounded-circle mr-2">
+                {% endif %}
+                <!-- Show username if user is logged in -->
+                {% if user.is_authenticated %}
+                  {{ user.username }}
+                {% endif %}
+              </a>
+            </li>
+          </ul>
+        </div> 
+      </div> 
+    </nav>
+
+    <!-- 2nd bar -->
+  <nav class="navbar navbar-light bg-white border-bottom mt-auto" style="padding-top: 20px; padding-bottom: 0px;">
+    <div class="container-fluid d-flex align-items-end">
+        <ul class="navbar-nav flex-row">
+            <li class="nav-item mx-3">
+                <a class="nav-link 
+                  {% if request.resolver_match.url_name == 'explore' %}active{% endif %}" 
+                  href="{% url 'explore' %}">
+                  Explore
+                </a>
+            </li>
+            <li class="nav-item mx-3">
+                <a class="nav-link 
+                  {% if request.resolver_match.url_name == 'mycommunity' %}active{% endif %}" 
+                  href="{% url 'mycommunity' %}">
+                  My Community
+                </a>
+            </li>
+        </ul>
+    </div>
+  </nav>
+
+  <!-- Main stuff area -->
+  <div class="container-fluid mt-4">
+    {% block content %}
+      <!-- Each child template puts its stuff here -->
+    {% endblock content %}
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+  <script src="https://kit.fontawesome.com/3d3b66b071.js" crossorigin="anonymous"></script>
+
+</body>
+</html>
+
+

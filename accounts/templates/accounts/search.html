@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+  {% comment %} <!-- Search Bar -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-8">
+      <form class="d-flex" method="get" action="{% url 'accounts:search_profiles' %}">
+        <input 
+          type="search" 
+          name="search_term" 
+          class="form-control me-2" 
+          placeholder="Search for users..." 
+          value="{{ request.GET.search_term }}" 
+          aria-label="Search">
+        <button class="btn btn-primary" type="submit">Search</button>
+      </form>
+    </div>
+  </div> {% endcomment %}
+
+  <!-- Results -->
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      {% if profiles %}
+        <div class="list-group shadow-sm">
+          {% for profile in profiles %}
+            <a href="{% url 'accounts:profile_detail' profile.user.username %}" class="list-group-item list-group-item-action d-flex align-items-center gap-3">
+              <img 
+                src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'images/default_user.jpg' %}{% endif %}" 
+                alt="{{ profile.user.username }}'s profile picture" 
+                class="rounded-circle" 
+                style="width: 40px; height: 40px; object-fit: cover;">
+              <div>
+                <strong>{{ profile.user.username }}</strong><br>
+                <small class="text-muted">{{ profile.bio|default:"No bio yet." }}</small>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-muted text-center">No profiles found.</p>
+      {% endif %}
+
+      <div class="mb-3">
+        <a href="javascript:history.back()" class="text-decoration-none text-dark d-flex align-items-center">
+          <i class="fas fa-arrow-left mr-2"></i> Back
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+

@@ -1,0 +1,358 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}  
+
+{% block title %}explore{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/explore.css' %}">
+{% endblock head %}
+
+{% block content %}
+
+<div class="container-fluid h-100">
+  <div class="row flex-nowrap">
+
+    <!-- Left collum-->
+    <div class="col-md-3 d-flex flex-column">
+      <div class="small-box hover-sign bg-white rounded shadow-sm p-3 mb-3 flex-grow-1" style="height: 700px !important; " data-video="https://lara-bsl-videos.s3.eu-north-1.amazonaws.com/videos/MyCommunities.mp4">
+        <h5>My Communities</h5>
+        <div class="scrollable-community-list">
+          {% if joined_communities %}
+            {% for community in joined_communities %}
+              <div class="community-mini-card d-flex gap-2 align-items-center mb-2">
+                {% if community.image %}
+                  <img src="{{ community.image.url }}" alt="{{ community.name }}" class="community-mini-image">
+                {% else %}
+                  <img src="{% static 'images/default_user.jpg' %}" alt="default" class="community-mini-image">
+                {% endif %}
+                <div>
+                  <small class="text-uppercase text-muted fw-bold">{{ community.is_public|yesno:"Public,Private" }}</small><br>
+                  <strong>
+                    <a href="{% url 'community_detail' community.id %}" class="text-decoration-none text-dark">
+                      {{ community.name }}
+                    </a>
+                  </strong><br>                  
+                  <small class="text-muted">{{ community.members.count }} Members</small>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <p class="text-muted">You haven’t joined any communities.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Center collum -->
+    <div class="col-md-6 d-flex flex-column p-0 border-start border-end" style="height: 100vh; overflow: hidden;">
+      <div id="post-box" class="post-form-box hover-sign p-3 bg-white mb-3 shadow-sm rounded w-100" data-video="https://lara-bsl-videos.s3.eu-north-1.amazonaws.com/videos/Postform.mp4">
+        <div class="d-flex align-items-start w-100">
+          <img 
+            src="{% if user.is_authenticated and user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}{% static 'images/default_user.jpg' %}{% endif %}" 
+            alt="Profile" 
+            class="rounded-circle me-3" 
+            style="width: 40px; height: 40px; object-fit: cover; border: 1px solid #ccc;"
+          >
+        
+          <form method="POST" enctype="multipart/form-data" class="flex-grow-1 w-100" id="post-form">
+            {% csrf_token %}
+            <textarea 
+              name="text"
+              rows="1"
+              class="form-control mb-2 w-100"
+              id="post-text"
+              placeholder="Share your thoughts or a post"
+              style="background-color: #f5f5f5; border: none; border-radius: 20px; resize: none;"
+            ></textarea>
+
+            <div id="post-expanded" style="display: none;">
+              <div class="mb-2">
+                {{ form.community }}
+              </div>
+
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <label for="video-upload" class="btn btn-light btn-sm mb-0">
+                  <i class="fas fa-video"></i>
+                </label>
+                <input type="file" name="video" id="video-upload" accept="video/*" hidden>
+                <label for="image-upload" class="btn btn-light btn-sm mb-0">
+                  <i class="fas fa-image"></i>
+                </label>
+                <input type="file" name="image" id="image-upload" accept="image/*" hidden>
+                <button type="button" class="btn btn-light btn-sm mb-0">
+                  <i class="fas fa-smile"></i>
+                </button>
+              </div>
+
+              <div id="media-preview" class="mb-2" style="display: none;">
+                <div id="image-wrapper" class="position-relative d-inline-block" style="display: none;">
+                  <img id="image-preview" class="img-fluid rounded" style="max-height: 200px; display: none;">
+                  <button type="button" id="remove-image-btn" class="position-absolute top-0 end-0 btn p-1">
+                    <i class="fas fa-times fa-lg text-dark"></i>
+                  </button>
+                </div>
+
+                <div id="video-wrapper" class="position-relative d-inline-block" style="display: none;">
+                  <video id="video-preview" controls class="w-100 rounded" style="max-height: 200px; display: none;"></video>
+                  <button type="button" id="remove-video-btn" class="position-absolute top-0 end-0 btn p-1">
+                    <i class="fas fa-times fa-lg text-dark"></i>
+                  </button>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-sm">Post</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+
+      <!-- Main Feed -->
+      <div class="main-feed hover-sign px-3 py-2 flex-grow-1 overflow-auto" data-video="https://lara-bsl-videos.s3.eu-north-1.amazonaws.com/videos/Feed.mp4" style="padding-bottom: 5rem;">    
+        {% for post in posts %}
+          <div class="post-card mb-4 p-3 bg-white rounded shadow-sm" data-post-id="{{ post.id }}">
+            <div class="d-flex align-items-center mb-2">
+              {% if post.community.image %}
+                <img src="{{ post.community.image.url }}" alt="{{ post.community.name }}" class="me-2 rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+              {% else %}
+                <img src="{% static 'images/default_user.jpg' %}" alt="default" class="me-2 rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+              {% endif %}
+              <div class="flex-grow-1">
+                <strong>
+                  <a href="{% url 'community_detail' post.community.id %}" class="text-decoration-none text-dark">
+                    {{ post.community.name }}
+                  </a>
+                </strong><br>                
+                <div class="d-flex align-items-center text-muted" style="font-size: 0.9rem;">
+                  <img 
+                    src="{% if post.user.profile.profile_picture %}{{ post.user.profile.profile_picture.url }}{% else %}{% static 'images/default_user.jpg' %}{% endif %}" 
+                    class="rounded-circle me-1" 
+                    style="width: 20px; height: 20px; object-fit: cover; border: 1px solid #ccc;"
+                  >
+                  <span>
+                    {% if post.user == request.user %}
+                      <a href="{% url 'accounts:profile' %}" class="text-decoration-none text-dark">
+                        {{ post.user.username }}
+                      </a>
+                    {% else %}
+                      <a href="{% url 'accounts:profile_detail' post.user.username %}" class="text-decoration-none text-dark">
+                        {{ post.user.username }}
+                      </a>
+                    {% endif %}
+                  </span>                  
+                  <span class="mx-1">•</span>
+                  <span>{{ post.timestamp|naturaltime }}</span>
+                </div>
+              </div>
+            </div>
+
+            {% if post.text %}
+              <p class="mb-2">{{ post.text }}</p>
+            {% endif %}
+            {% if post.image and post.image.url %}
+              <img src="{{ post.image.url }}" alt="post image" class="img-fluid rounded mb-2" style="max-height: 400px; object-fit: cover;">
+            {% endif %}
+            {% if post.video and post.video.url %}
+              <video controls class="w-100 rounded mb-2" style="max-height: 400px;">
+                <source src="{{ post.video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            {% endif %}
+            <hr class="my-3">
+
+            <!-- Like amnd Comment Count -->
+            <div class="text-muted mb-1" style="font-size: 0.9rem;">
+              {{ post.total_likes }} likes · {{ post.comments.count }} comments
+            </div>
+
+            <div class="d-flex align-items-center">
+              <button class="like-button btn p-0 border-0 bg-transparent d-flex align-items-center mr-4">
+                {% if user in post.likes.all %}
+                  <i class="fas fa-heart text-danger mr-1"></i> <span>Liked</span>
+                {% else %}
+                  <i class="far fa-heart text-dark mr-1"></i> <span>Like</span>
+                {% endif %}
+              </button>
+              <a href="{% url 'post_detail' post.id %}" class="btn p-0 border-0 bg-transparent d-flex align-items-center">
+                <i class="far fa-comment mr-1"></i> <span>Comment</span>
+              </a>
+            </div>
+            <!-- Delete Button if user is the creator -->
+            {% if post.user == request.user %}
+            <div class="text-right mt-2">
+              <form action="{% url 'delete_post' post.id %}" method="POST" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this post?');">
+                  Delete
+                </button>
+              </form>
+            </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Right collum-->
+    <div class="col-md-3 p-3 bg-light d-none d-md-block">
+      <div class="position-sticky" style="top: 120px;">
+        <div class="video-box p-3 bg-white rounded shadow-sm">
+          <h5>BSL Interpreter</h5>
+          <div style="width: 100%; height: 430px; position: relative;">
+            <video id="hover-video" muted playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; display: none;">
+              <source id="hover-video-source" src="" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+  <script src="https://kit.fontawesome.com/3d3b66b071.js" crossorigin="anonymous"></script>
+
+  <script>
+    const textInput = document.getElementById('post-text');
+  const expandedSection = document.getElementById('post-expanded');
+  const imageInput = document.getElementById('image-upload');
+  const videoInput = document.getElementById('video-upload');
+
+  const mediaPreview = document.getElementById('media-preview');
+  const imageWrapper = document.getElementById('image-wrapper');
+  const videoWrapper = document.getElementById('video-wrapper');
+  const imagePreview = document.getElementById('image-preview');
+  const videoPreview = document.getElementById('video-preview');
+
+  const removeImageBtn = document.getElementById('remove-image-btn');
+  const removeVideoBtn = document.getElementById('remove-video-btn');
+
+  textInput.addEventListener('focus', () => {
+    expandedSection.style.display = 'block';
+    textInput.rows = 3;
+  });
+
+  imageInput.addEventListener('change', function () {
+    const file = this.files[0];
+    if (file) {
+      imagePreview.src = URL.createObjectURL(file);
+      imagePreview.style.display = 'block';
+      imageWrapper.style.display = 'inline-block';
+
+      videoInput.value = '';
+      videoPreview.src = '';
+      videoPreview.style.display = 'none';
+      videoWrapper.style.display = 'none';
+
+      mediaPreview.style.display = 'block';
+    }
+  });
+
+  // Video upload logic
+  videoInput.addEventListener('change', function () {
+    const file = this.files[0];
+    if (file) {
+      videoPreview.src = URL.createObjectURL(file);
+      videoPreview.style.display = 'block';
+      videoWrapper.style.display = 'inline-block';
+
+      imageInput.value = '';
+      imagePreview.src = '';
+      imagePreview.style.display = 'none';
+      imageWrapper.style.display = 'none';
+
+      mediaPreview.style.display = 'block';
+    }
+  });
+
+  // Remove image
+  removeImageBtn.addEventListener('click', () => {
+    imageInput.value = '';
+    imagePreview.src = '';
+    imagePreview.style.display = 'none';
+    imageWrapper.style.display = 'none';
+
+    if (videoWrapper.style.display === 'none') {
+      mediaPreview.style.display = 'none';
+    }
+  });
+
+  // Remove video
+  removeVideoBtn.addEventListener('click', () => {
+    videoInput.value = '';
+    videoPreview.src = '';
+    videoPreview.style.display = 'none';
+    videoWrapper.style.display = 'none';
+
+    if (imageWrapper.style.display === 'none') {
+      mediaPreview.style.display = 'none';
+    }
+  });
+
+  //like logic 
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.like-button').forEach(button => {
+      button.addEventListener('click', function() {
+        const postCard = this.closest('.post-card');
+        const postId = postCard.dataset.postId;
+
+        fetch("{% url 'like_post' %}", {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: `post_id=${postId}`
+        })
+        .then(response => response.json())
+        .then(data => {
+          const icon = this.querySelector('i');
+          const text = this.querySelector('span');
+          const count = postCard.querySelector('.like-count');
+          
+          if (data.liked) {
+            icon.classList.remove('far', 'text-dark');
+            icon.classList.add('fas', 'text-danger');
+            text.textContent = 'Liked';
+          } else {
+            icon.classList.remove('fas', 'text-danger');
+            icon.classList.add('far', 'text-dark');
+            text.textContent = 'Like';
+          }
+          count.textContent = data.like_count;
+        });
+      });
+    });
+  });
+
+
+  let hoverTimeout;
+let hideTimeout;
+const video = document.getElementById("hover-video");
+const videoSource = document.getElementById("hover-video-source");
+
+document.querySelectorAll(".hover-sign").forEach(el => {
+  el.addEventListener("mouseenter", () => {
+    clearTimeout(hideTimeout);
+    const videoUrl = el.getAttribute("data-video");
+    hoverTimeout = setTimeout(() => {
+      videoSource.src = videoUrl;
+      video.load();
+      video.style.display = "block"; 
+      video.play();
+    }, 600);
+  });
+
+  el.addEventListener("mouseleave", () => {
+    clearTimeout(hoverTimeout);
+    hideTimeout = setTimeout(() => {
+      video.pause();
+      video.currentTime = 0;
+      video.style.display = "none"; 
+    }, 400);
+  });
+});
+</script>
+
+{% endblock %}

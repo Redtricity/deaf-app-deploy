@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% block title %}{{ community.name }}{% endblock %}
+
+{% block head %}
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+  }
+</style>
+{% endblock head %}
+{% block content %}
+<div class="container mt-4">
+
+  <div class="mb-3">
+    <a href="javascript:history.back()" class="text-decoration-none text-dark d-flex align-items-center">
+      <i class="fas fa-arrow-left mr-2"></i> Back
+    </a>
+  </div>
+
+  <div class="row">
+    
+    <!-- Left Main Area -->
+    <div class="col-md-8">
+      <div class="card p-4 shadow-sm mb-3">
+        <div class="d-flex align-items-center">
+          {% if community.image %}
+            <img src="{{ community.image.url }}" alt="{{ community.name }}" class="me-3 rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
+          {% else %}
+            <img src="{% static 'images/default_user.jpg' %}" alt="default" class="me-3 rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
+          {% endif %}
+          <div>
+            <h2 class="mb-0">{{ community.name }}</h2>
+            <p class="text-muted mb-0">{{ community.description }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Posts Feed -->
+      <div class="card p-4 shadow-sm" style="height: 400px; overflow-y: auto;">
+        {% for post in posts %}
+        <div class="post-card mb-4 p-3 bg-white rounded shadow-sm">
+          
+          <div class="d-flex align-items-center text-muted mb-2" style="font-size: 0.9rem;">
+            <img 
+              src="{% if post.user.profile.profile_picture %}{{ post.user.profile.profile_picture.url }}{% else %}{% static 'images/default_user.jpg' %}{% endif %}" 
+              class="rounded-circle me-2" 
+              style="width: 25px; height: 25px; object-fit: cover; border: 1px solid #ccc;"
+              alt="{{ post.user.username }} profile picture">
+            <span>
+              <a href="{% url 'post_detail' post.id %}" class="text-decoration-none text-dark fw-bold">
+                {{ post.user.username }}
+              </a>
+            </span>
+            <span class="mx-1">•</span>
+            <span>{{ post.timestamp|naturaltime }}</span>
+          </div>
+
+          {% if post.text %}
+            <p class="mb-2">{{ post.text }}</p>
+          {% endif %}
+
+          {% if post.image %}
+            <img src="{{ post.image.url }}" alt="Post image" class="img-fluid rounded mb-2" style="max-height: 400px; object-fit: cover;">
+          {% endif %}
+
+          {% if post.video %}
+            <video controls class="w-100 rounded mb-2" style="max-height: 400px;">
+              <source src="{{ post.video.url }}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          {% endif %}
+        </div>
+      {% empty %}
+        <p class="text-muted">No posts in this community yet.</p>
+      {% endfor %}
+      </div>
+    </div> 
+
+    <!-- Sidebar Info -->
+    <div class="col-md-4">
+      <div class="card p-4 shadow-sm">
+        <h5 class="mb-3">Community Info</h5>
+        <p>
+          <strong>Created by:</strong>
+          {% if community.created_by == request.user %}
+            <a href="{% url 'accounts:profile' %}" class="text-decoration-none text-dark">
+              {{ community.created_by.username }}
+            </a>
+          {% else %}
+            <a href="{% url 'accounts:profile_detail' community.created_by.username %}" class="text-decoration-none text-dark">
+              {{ community.created_by.username }}
+            </a>
+          {% endif %}
+        </p>
+        <p><strong>Visibility:</strong> {{ community.is_public|yesno:"Public,Private" }}</p>
+        <p><strong>Created on:</strong> {{ community.created_at|date:"F j, Y" }}</p>
+        <p><strong>Members:</strong> {{ community.members.count }}</p>
+      </div>
+    </div> 
+
+  </div> 
+</div> 
+
+{% endblock %}

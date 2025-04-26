@@ -1,0 +1,66 @@
+{% load static %}
+{% load humanize %}
+
+<div class="comment-box mb-2">
+  <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center">
+      <img 
+        src="{% if comment.user.profile.profile_picture %}{{ comment.user.profile.profile_picture.url }}{% else %}{% static 'images/default_user.jpg' %}{% endif %}" 
+        alt="User" 
+        class="rounded-circle mr-2" 
+        style="width: 24px; height: 24px; object-fit: cover; border: 1px solid #ccc;"
+      >
+      <strong class="ml-2">{{ comment.user.username }}</strong>
+    </div>
+    <small class="text-muted">{{ comment.timestamp|naturaltime }}</small>
+  </div>
+
+  <p class="mb-1">
+    {% if comment.deleted %}
+      <em class="text-muted">[post deleted]</em>
+    {% else %}
+      {{ comment.text }}
+    {% endif %}
+  </p>
+
+  <div class="d-flex align-items-center justify-content-between comment-controls">
+    <div class="d-flex align-items-center gap-2">
+      <button class="btn btn-link btn-sm p-0 reply-btn">Reply</button>
+      {% if comment.replies.all %}
+        <span class="text-muted mx-1">|</span>
+        <button class="btn btn-link btn-sm p-0 toggle-replies" data-target="#replies-{{ comment.id }}">Show Replies</button>
+      {% endif %}
+    </div>
+
+    {% if user == comment.user %}
+      <div class="dropdown">
+        <button class="btn btn-link btn-sm p-0 dropdown-toggle" type="button" id="dropdownMenuButton{{ comment.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          ⋯
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ comment.id }}">
+          <a class="dropdown-item" href="{% url 'edit_comment' comment.id %}">Edit</a>
+          <form method="POST" action="{% url 'delete_comment' comment.id %}">
+            {% csrf_token %}
+            <button class="dropdown-item text-danger" type="submit">Delete</button>
+          </form>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  <form method="POST" action="{% url 'reply_to_comment' post.id comment.id %}" style="display: none;" class="mt-2 reply-form">
+    {% csrf_token %}
+    <textarea name="text" rows="2" class="form-control mb-2" placeholder="Write your reply..."></textarea>
+    <button type="submit" class="btn btn-sm btn-secondary">Reply</button>
+  </form>
+
+  <div id="replies-{{ comment.id }}" class="nested-replies mt-3" style="display: none;">
+    {% for reply in comment.replies.all %}
+      {% include "nested_comments.html" with comment=reply %}
+    {% endfor %}
+  </div>
+</div>
+
+
+
+

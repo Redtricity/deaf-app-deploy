@@ -1,0 +1,25 @@
+
+/* Login Template */
+
+/* Login Button */
+.btn-primary {
+  background-color: orange; /* Change button color to orange */
+  border-color: orange; /* Optional: Change border color to match */
+  display: block;  /* Makes the button a block element */
+  width: 100%;     /* Stretches the button to fill the container */
+  margin-top: 10px; /* Adds space above the button */
+}
+
+/* Register Template */
+
+
+/* Notification Dot */
+.notification-dot {
+  position: absolute;
+  top: 0;            
+  right: 0;
+  width: 8px;
+  height: 8px;
+  background-color: #dc3545; /* red */
+  border-radius: 50%;
+}

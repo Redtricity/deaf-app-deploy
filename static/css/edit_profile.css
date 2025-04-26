@@ -1,0 +1,45 @@
+.profile-edit-card {
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  background-color: #ffffff;
+}
+
+.profile-img-preview {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+}
+
+.profile-pic-input {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.form-check-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.form-check {
+  background: #f1f1f1;
+  border-radius: 20px;
+  padding: 0.25rem 1rem;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.form-check input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+textarea#id_bio {
+  height: 80px;
+  resize: vertical;
+}

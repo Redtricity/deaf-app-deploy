@@ -1,0 +1,75 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+.community-container {
+  height: calc(100vh - 100px); 
+  overflow: hidden;
+}
+
+
+.large-box {
+  background-color: #fff;
+  border: 1px solid white;
+  padding: 1rem;
+  border-radius: 10px;
+  height: 100px; /* <<< MAKE IT SHORTER here */
+  overflow-y: auto; /* <<< Allow scrolling if too many communities */
+  overflow-x: hidden; /* <<< Prevent weird side scroll */
+}
+
+
+
+.community-image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+
+.btn-sm {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  border-radius: 5px;
+}
+
+.video-box {
+  background-color: #fff;
+  border: 1px solid white;
+  padding: 1rem;
+  border-radius: 10px;
+  height: 600px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.video-box h5 {
+  margin: 0; 
+  padding-top: 0.5rem; 
+  padding-bottom: 1rem; 
+  font-weight: bold;
+  text-align: center; 
+  width: 100%;
+}
+
+
+.video-box video {
+  max-height: 90%;
+  width: auto;
+  object-fit: contain;
+  opacity: 0; 
+  transition: opacity 0.3s ease; 
+}
+.video-box video.active {
+  opacity: 1; 
+}
+
+

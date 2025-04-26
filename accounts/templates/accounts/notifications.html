@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+<div class="container mt-4" style="max-height: 80vh; overflow-y: auto;">
+
+  <div class="card shadow-sm p-4">
+    <h2 class="mb-4">Notifications</h2>
+
+    {% if notifications %}
+      <ul class="list-group list-group-flush">
+        {% for notification in notifications %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              {% if notification.notification_type == 'FR' %}
+                <strong>{{ notification.from_user.username }}</strong> has sent you a follow request.
+              {% elif notification.notification_type == 'FA' %}
+                <strong>{{ notification.from_user.username }}</strong> has accepted your follow request.
+              {% endif %}
+            </div>
+
+            {% if notification.notification_type == 'FR' %}
+              <div class="d-flex gap-2">
+                <a href="{% url 'accounts:accept_follow_request' notification.id %}" class="btn btn-sm btn-success">Accept</a>
+                <a href="{% url 'accounts:reject_follow_request' notification.id %}" class="btn btn-sm btn-danger">Reject</a>
+              </div>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-muted">No new notifications.</p>
+    {% endif %}
+    
+    <a href="javascript:history.back()" class="text-decoration-none text-dark d-flex align-items-center">
+        <i class="fas fa-arrow-left mr-2"></i> Back
+    </a>
+  
+  </div>
+
+</div>
+{% endblock %}

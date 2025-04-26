@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Community{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/community.css' %}">
+{% endblock head %}
+
+{% block content %}
+<div class="container-fluid community-container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <a href="{% url 'create_community' %}" class="btn btn-primary">+ Create Community</a>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-3 d-flex flex-column" style="height: 460px;">
+      <div class="large-box hover-sign flex-grow-1" data-video="https://lara-bsl-videos.s3.eu-north-1.amazonaws.com/videos/OwnedCom.mp4">
+        <h5>Owned Communities</h5>
+        {% if owned_communities %}
+          {% for community in owned_communities %}
+            <div class="d-flex align-items-center mb-3">
+              {% if community.image %}
+                <img src="{{ community.image.url }}" alt="{{ community.name }}" class="me-3" style="width: 50px; height: 50px; object-fit: cover; border-radius: 10px;">
+              {% else %}
+                <img src="{% static 'images/default_user.jpg' %}" alt="default" class="me-3" style="width: 50px; height: 50px; object-fit: cover; border-radius: 10px;">
+              {% endif %}
+              <div>
+                <h5 class="mb-1">
+                  <a href="{% url 'community_detail' community.id %}" class="text-decoration-none text-dark">
+                    {{ community.name }}
+                  </a>
+                </h5>
+                <p class="mb-1 text-muted">{{ community.description }}</p>
+                <small class="text-muted">Members: {{ community.members.count }}</small>
+                <form method="post" action="{% url 'delete_community' community.id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+          </div>
+        </div>
+        <hr>
+          {% endfor %}
+        {% else %}
+          <p>You haven’t created any communities.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="col-md-3 d-flex flex-column" style="height: 460px;">
+      <div class="large-box hover-sign flex-grow-1" data-video="https://lara-bsl-videos.s3.eu-north-1.amazonaws.com/videos/Joinedcom.mp4">
+        <h5>Joined Communities</h5>
+        {% if joined_communities %}
+          {% for community in joined_communities %}
+            <div class="d-flex align-items-center mb-3">
+              {% if community.image %}
+                <img src="{{ community.image.url }}" alt="{{ community.name }}" class="me-3" style="width: 50px; height: 50px; object-fit: cover; border-radius: 10px;">
+              {% else %}
+                <img src="{% static 'images/default_user.jpg' %}" alt="default" class="me-3" style="width: 50px; height: 50px; object-fit: cover; border-radius: 10px;">
+              {% endif %}
+              <div>
+                <h5 class="mb-1">
+                  <a href="{% url 'community_detail' community.id %}" class="text-decoration-none text-dark">
+                    {{ community.name }}
+                  </a>
+                </h5>
+                <p class="mb-1 text-muted">{{ community.description }}</p>
+                <form method="post" action="{% url 'toggle_community_membership' community.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-outline-danger btn-sm">Unjoin</button>
+                </form>
+              </div>
+            </div>
+            <hr>
+          {% endfor %}
+        {% else %}
+          <p>You haven’t joined any communities yet.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="col-md-3 d-flex flex-column" style="height: 460px;">
+      <div class="large-box hover-sign flex-grow-1" data-video="https://lara-bsl-videos.s3.eu-north-1.amazonaws.com/videos/Suggestcom.mp4">
+        <h5>Suggested Communities</h5>
+        {% if suggested_communities %}
+          {% for community in suggested_communities %}
+            <div class="d-flex align-items-center mb-3">
+              {% if community.image %}
+                <img src="{{ community.image.url }}" alt="{{ community.name }}" class="me-3" style="width: 50px; height: 50px; object-fit: cover; border-radius: 10px;">
+              {% else %}
+                <img src="{% static 'images/default_user.jpg' %}" alt="default" class="me-3" style="width: 50px; height: 50px; object-fit: cover; border-radius: 10px;">
+              {% endif %}
+              <div>
+                <h5 class="mb-1">
+                  <a href="{% url 'community_detail' community.id %}" class="text-decoration-none text-dark">
+                    {{ community.name }}
+                  </a>
+                </h5>
+                <p class="mb-1 text-muted">{{ community.description }}</p>
+                <form method="post" action="{% url 'toggle_community_membership' community.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-success btn-sm">Join</button>
+                </form>
+              </div>
+            </div>
+            <hr>
+          {% endfor %}
+        {% else %}
+          <p>No new communities to suggest.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Sign Language Video -->
+    <div class="col-md-3 p-3 bg-light d-none d-md-block" style="margin-top: -20px;">
+      <div class="position-sticky" style="top: 10px;">
+        <div class="video-box p-3 bg-white rounded shadow-sm">
+          <h5>BSL Interpreter</h5>
+          <div style="width: 100%; height: 400px; position: relative;">
+            <video id="hover-video" muted playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; display: none;">
+              <source id="hover-video-source" src="" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+
+  let hoverTimeout;
+let hideTimeout;
+const video = document.getElementById("hover-video");
+const videoSource = document.getElementById("hover-video-source");
+
+document.querySelectorAll(".hover-sign").forEach(el => {
+  el.addEventListener("mouseenter", () => {
+    clearTimeout(hideTimeout);
+    const videoUrl = el.getAttribute("data-video");
+    hoverTimeout = setTimeout(() => {
+      videoSource.src = videoUrl;
+      video.load();
+      video.style.display = "block"; 
+      video.play();
+    }, 600);
+  });
+
+  el.addEventListener("mouseleave", () => {
+    clearTimeout(hoverTimeout);
+    hideTimeout = setTimeout(() => {
+      video.pause();
+      video.currentTime = 0;
+      video.style.display = "none"; 
+    }, 400);
+  });
+});
+
+
+</script>
+{% endblock %}
+

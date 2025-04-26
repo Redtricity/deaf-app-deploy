@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feed</title>
+</head>
+<body>
+    <h1>Feed</h1>
+    {% for video in videos %}
+    <div>
+        <video width="320" height="240" controls>
+            <source src="{{ video.video.url }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <p><strong>{{ video.user.username }}</strong></p>
+        <p>{{ video.caption }}</p>
+        <p>{{ video.location }}</p>
+        <p>{{ video.description }}</p>
+        <p>{{ video.created_at }}</p>
+    </div>
+    {% endfor %}
+    <a href="{#}">Home</a>
+</body>
+</html>

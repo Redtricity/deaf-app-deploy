@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ profile.user.username }}'s Profile{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/profile_styles.css' %}"> <!--Having some issues with this so some styles below-->
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+  }
+  .profile-sidebar {
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+  }
+  .profile-tabs {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 1rem;
+  }
+  .profile-sidebar .badge-info {
+    background-color: #00b3b3;
+    color: #fff;
+  }
+</style>
+{% endblock head %}
+
+{% block content %}
+
+<div class="mb-3">
+  <a href="javascript:history.back()" class="text-decoration-none text-dark d-flex align-items-center">
+    <i class="fas fa-arrow-left mr-2"></i> Back
+  </a>
+</div>
+
+<div class="container-fluid h-100">
+  <div class="row h-100 flex-nowrap">
+    <!-- Center stuff-->
+    <div class="col-md-8 d-flex flex-column px-4 border-end" style="height: 100vh; overflow: hidden;">
+      <div class="d-flex align-items-center mt-4 mb-3">
+        <img 
+          src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'images/default_user.jpg' %}{% endif %}" 
+          alt="Profile picture" 
+          class="rounded-circle me-3" 
+          style="width: 60px; height: 60px; object-fit: cover; border: 2px solid #ccc;">
+        <h4 class="mb-0">{{ profile.user.username }}</h4>
+      </div>
+
+      <!-- Message -->
+      <div class="alert alert-warning mt-2">
+        <strong>This profile is private.</strong><br>
+        Please send a follow request to view full details.
+      </div>
+
+      <div class="mt-3">
+        {% if request.user != profile.user %}
+          {% if follow_request_sent %}
+            <form method="post" action="{% url 'accounts:revoke_follow_request' profile.user.username %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-outline-secondary btn-sm">Revoke Follow Request</button>
+            </form>
+          {% else %}
+            <form method="post" action="{% url 'accounts:follow' profile.user.username %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary btn-sm">Send Follow Request</button>
+            </form>
+          {% endif %}
+        {% endif %}
+      </div>
+
+    </div>
+
+    <div class="card profile-sidebar shadow-sm border-0">
+      <div class="card-body position-relative">
+
+        {% if profile.location or profile.city %}
+        <span class="position-absolute text-muted small" style="top: 10px; right: 15px;">
+          {% if profile.city %}{{ profile.city }}, {% endif %}{{ profile.location.code }}
+        </span>
+        {% endif %}
+
+        <div class="d-flex align-items-center mb-2">
+          <img 
+            src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'images/default_user.jpg' %}{% endif %}" 
+            alt="{{ profile.user.username }}'s profile picture"
+            class="rounded-circle shadow" 
+            style="width: 70px; height: 70px; object-fit: cover; border: 3px solid #fff;">
+          <div class="ms-3">
+            <h5 class="mb-0">{{ profile.user.username }}</h5>
+            <small class="text-muted d-block">{{ profile.bio|default:"No bio yet." }}</small>
+          </div>
+        </div>
+
+        {% if profile.identity_tags.all %}
+          <div class="mb-2 mt-2">
+            {% for tag in profile.identity_tags.all %}
+              <span class="badge badge-pill badge-info mr-1" style="font-size: 0.75rem;">{{ tag.name }}</span>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <hr class="my-2">
+
+        <div class="text-center mb-3">
+          <span class="badge badge-light border rounded-pill px-3 py-1 me-1" style="font-size: 0.85rem;">
+            {{ profile.get_hearing_status_display }}
+          </span>
+          <span class="badge badge-light border rounded-pill px-3 py-1" style="font-size: 0.85rem;">
+            {{ profile.get_sign_language_preference_display }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
