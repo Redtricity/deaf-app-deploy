@@ -60,13 +60,13 @@
           <label>Deaf-aware identity tags:</label>
           <div class="form-check-group">
             {% for checkbox in form.identity_tags %}
-              <div class="form-check d-inline-block">
-                {{ checkbox.tag }}
-                <label for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
+              <div class="form-check d-inline-block mr-2">
+                {{ checkbox }}
               </div>
             {% endfor %}
           </div>
         </div>
+        
 
         <div class="text-right">
           <button type="submit" class="btn btn-primary">Save Changes</button>

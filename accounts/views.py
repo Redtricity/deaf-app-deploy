@@ -98,13 +98,16 @@ def edit_profile_view(request):
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)  
         if form.is_valid():
-            form.save()
+            profile = form.save(commit=False)  
+            profile.save()                     
+            form.save_m2m()                    
             messages.success(request, 'Profile updated successfully.')
             return redirect('accounts:profile')
     else:
         form = ProfileForm(instance=request.user.profile)
         
     return render(request, 'accounts/editprofile.html', {'form': form})
+
 
 @login_required    
 def search_profiles(request):

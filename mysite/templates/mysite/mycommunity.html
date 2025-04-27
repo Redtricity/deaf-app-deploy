@@ -127,36 +127,40 @@
   </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://kit.fontawesome.com/3d3b66b071.js" crossorigin="anonymous"></script>
+
+
 <script>
-
-  let hoverTimeout;
-let hideTimeout;
-const video = document.getElementById("hover-video");
-const videoSource = document.getElementById("hover-video-source");
-
-document.querySelectorAll(".hover-sign").forEach(el => {
-  el.addEventListener("mouseenter", () => {
-    clearTimeout(hideTimeout);
-    const videoUrl = el.getAttribute("data-video");
-    hoverTimeout = setTimeout(() => {
-      videoSource.src = videoUrl;
-      video.load();
-      video.style.display = "block"; 
-      video.play();
-    }, 600);
+  document.addEventListener("DOMContentLoaded", function() {
+    let hoverTimeout;
+    let hideTimeout;
+    const video = document.getElementById("hover-video");
+    const videoSource = document.getElementById("hover-video-source");
+  
+    document.querySelectorAll(".hover-sign").forEach(el => {
+      el.addEventListener("mouseenter", () => {
+        clearTimeout(hideTimeout);
+        const videoUrl = el.getAttribute("data-video");
+        hoverTimeout = setTimeout(() => {
+          videoSource.src = videoUrl;
+          video.load();
+          video.style.display = "block"; 
+          video.play();
+        }, 600);
+      });
+  
+      el.addEventListener("mouseleave", () => {
+        clearTimeout(hoverTimeout);
+        hideTimeout = setTimeout(() => {
+          video.pause();
+          video.currentTime = 0;
+          video.style.display = "none"; 
+        }, 400);
+      });
+    });
   });
-
-  el.addEventListener("mouseleave", () => {
-    clearTimeout(hoverTimeout);
-    hideTimeout = setTimeout(() => {
-      video.pause();
-      video.currentTime = 0;
-      video.style.display = "none"; 
-    }, 400);
-  });
-});
-
-
-</script>
+  </script>
 {% endblock %}
 
