@@ -141,6 +141,8 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',  # Tells Django about the global static folder
 ]
 
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Redirect to the login page after logout
