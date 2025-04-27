@@ -19,8 +19,6 @@ html, body {
   overflow-x: hidden;
 }
 
-
-
 .community-image {
   width: 50px;
   height: 50px;
@@ -38,37 +36,28 @@ html, body {
 }
 
 .video-box {
-  background-color: #fff;
-  border: 1px solid white;
-  padding: 1rem;
-  border-radius: 10px;
-  height: 600px;
-  overflow: hidden;
+  background-color: white;
+  min-height: 550px;
+  text-align: center;
+  position: relative;
+  overflow: hidden; 
+  margin-left: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
 }
 
-.video-box h5 {
-  margin: 0; 
-  padding-top: 0.5rem; 
-  padding-bottom: 1rem; 
-  font-weight: bold;
-  text-align: center; 
-  width: 100%;
-}
-
-
 .video-box video {
-  max-height: 90%;
-  width: auto;
-  object-fit: contain;
-  opacity: 0; 
-  transition: opacity 0.3s ease; 
+  width: 100%;
+  height: 100%;
+  object-fit: contain; 
+  display: none;
+  background: black; 
 }
-.video-box video.active {
-  opacity: 1; 
+
+.video-box h5 {
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
 
