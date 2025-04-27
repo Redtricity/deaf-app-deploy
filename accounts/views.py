@@ -169,17 +169,35 @@ def follow(request, username):
     if profile.is_public:
         follow_instance.status = Follow.FOLLOWING
         follow_instance.save()
+        
+        
+        Notification.objects.get_or_create(
+            to_user=user_to_follow,
+            from_user=request.user,
+            notification_type='F',  
+            defaults={'message': f'{request.user.username} started following you.'}
+        )
+
         messages.success(request, f'You are now following {user_to_follow.username}.')
+    
     else:
         if created or follow_instance.status != Follow.PENDING:
             follow_instance.status = Follow.PENDING
             follow_instance.save()
-            Notification.objects.get_or_create(to_user=user_to_follow, from_user=request.user, notification_type=Notification.FOLLOW_REQUEST)
+
+            Notification.objects.get_or_create(
+                to_user=user_to_follow,
+                from_user=request.user,
+                notification_type='FR',
+                defaults={'message': f'{request.user.username} has requested to follow you.'}
+            )
+
             messages.success(request, f'Follow request sent to {user_to_follow.username}.')
         else:
             messages.info(request, f'Follow request already sent to {user_to_follow.username}.')
 
     return redirect('accounts:profile_detail', username=username)
+
 
 @login_required
 def revoke_follow_request(request, username):

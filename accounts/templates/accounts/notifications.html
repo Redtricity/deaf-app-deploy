@@ -17,6 +17,8 @@
                 <strong>{{ notification.from_user.username }}</strong> has sent you a follow request.
               {% elif notification.notification_type == 'FA' %}
                 <strong>{{ notification.from_user.username }}</strong> has accepted your follow request.
+              {% elif notification.notification_type == 'F' %}
+                <strong>{{ notification.from_user.username }}</strong> started following you.
               {% endif %}
             </div>
 

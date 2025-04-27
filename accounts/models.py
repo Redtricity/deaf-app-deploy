@@ -57,9 +57,11 @@ class Notification(models.Model):
     # Types of notifications
     FOLLOW_REQUEST = 'FR'
     FOLLOW_ACCEPTED = 'FA'
+    FOLLOWED = 'F'
     NOTIFICATION_TYPES = [
         (FOLLOW_REQUEST, 'Follow Request'),
         (FOLLOW_ACCEPTED, 'Follow Accepted'),
+        (FOLLOWED, 'Followed'),
     ]
 
     to_user = models.ForeignKey(User, related_name='notifications_to', on_delete=models.CASCADE)
