@@ -15,9 +15,8 @@ html, body {
   border: 1px solid white;
   padding: 1rem;
   border-radius: 10px;
-  height: 100px; /* <<< MAKE IT SHORTER here */
-  overflow-y: auto; /* <<< Allow scrolling if too many communities */
-  overflow-x: hidden; /* <<< Prevent weird side scroll */
+  overflow-y: auto; 
+  overflow-x: hidden;
 }
 
 

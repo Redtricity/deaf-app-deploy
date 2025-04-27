@@ -15,7 +15,20 @@
     <div class="card-body">
       <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
+      
+        {% if form.errors %}
+        <div class="alert alert-danger">
+          <ul>
+            {% for field, errors in form.errors.items %}
+              {% for error in errors %}
+                <li>{{ field|capfirst }}: {{ error }}</li>
+              {% endfor %}
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
 
+      
         <div class="d-flex align-items-center mb-4">
           <div class="position-relative">
             {% if user.profile.profile_picture %}
@@ -23,7 +36,7 @@
             {% else %}
               <img id="preview-img" src="{% static 'images/default_user.jpg' %}" alt="Default profile picture" class="rounded-circle profile-img-preview">
             {% endif %}
-            <input type="file" name="profile_picture" id="id_profile_picture" class="profile-pic-input">
+            {{ form.profile_picture|add_class:"form-control-file" }}
           </div>
           
           <div class="ml-4 flex-grow-1">
@@ -32,8 +45,7 @@
             <small class="text-muted">Member since {{ user.date_joined|date:"F Y" }}</small>
           </div>
         </div>
-        
-
+      
         <div class="form-row">
           <div class="form-group col-md-6">
             {{ form.location.label_tag }}
@@ -44,7 +56,7 @@
             {{ form.city|add_class:"form-control" }}
           </div>
         </div>
-        
+      
         <div class="form-row">
           <div class="form-group col-md-6">
             {{ form.birth_date.label_tag }}
@@ -55,23 +67,25 @@
             {{ form.hearing_status|add_class:"form-control" }}
           </div>
         </div>
-        
+      
         <div class="form-group">
-          <label>Deaf-aware identity tags:</label>
+          <label>Tags:</label>
           <div class="form-check-group">
             {% for checkbox in form.identity_tags %}
               <div class="form-check d-inline-block mr-2">
-                {{ checkbox }}
+                {{ checkbox.tag }}
+                <label for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
               </div>
             {% endfor %}
           </div>
         </div>
-        
-
+      
         <div class="text-right">
           <button type="submit" class="btn btn-primary">Save Changes</button>
         </div>
+      
       </form>
+      
     </div>
   </div>
 </div>
