@@ -27,8 +27,15 @@ SECRET_KEY = 'django-insecure-oai^lj%31m0w^z5+h_%o-4sqb=kb_44)s6c0z6w=zs7c4t3%ta
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['deaf-app-deploy-production.up.railway.app']
-CSRF_TRUSTED_ORIGINS = ['https://deaf-app-deploy-production.up.railway.app']
+ALLOWED_HOSTS = [
+    'deaf-app-deploy-production.up.railway.app',  
+    'deaf-app-deploy-production-c70d.up.railway.app',  
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://deaf-app-deploy-production.up.railway.app',  
+    'https://deaf-app-deploy-production-c70d.up.railway.app',  
+]
+
 
 # Application definition
 
