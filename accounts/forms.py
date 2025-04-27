@@ -81,10 +81,11 @@ class ProfileForm(forms.ModelForm):
         fields = [
             'bio', 'location', 'city', 'birth_date',
             'hearing_status', 'sign_language_preference',
-            'identity_tags', 'profile_picture'
+            'profile_picture', 'identity_tags', 'is_public', 
         ]
         widgets = {
-            'birth_date': DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'birth_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'location': CountrySelectWidget(attrs={'class': 'form-control'}),
             'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., Glasgow or London'}),
+            'is_public': forms.CheckboxInput(attrs={'class': 'form-check-input'}), 
         }
