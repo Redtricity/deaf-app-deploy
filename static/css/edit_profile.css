@@ -1,4 +1,8 @@
-
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
 .profile-edit-card {
   padding: 2rem;
   border-radius: 16px;

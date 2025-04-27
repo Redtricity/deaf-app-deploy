@@ -56,7 +56,7 @@
             {{ form.city|add_class:"form-control" }}
           </div>
         </div>
-      
+        
         <div class="form-row">
           <div class="form-group col-md-6">
             {{ form.birth_date.label_tag }}
@@ -67,29 +67,17 @@
             {{ form.hearing_status|add_class:"form-control" }}
           </div>
         </div>
-
+        
         <div class="form-row">
           <div class="form-group col-md-6">
             {{ form.sign_language_preference.label_tag }}
             {{ form.sign_language_preference|add_class:"form-control" }}
           </div>
-        </div>
-      
-        <div class="form-group">
-          <label>Tags:</label>
-          <div class="form-check-group">
-            {% for checkbox in form.identity_tags %}
-              <div class="form-check d-inline-block mr-2">
-                {{ checkbox.tag }}
-                <label for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
-              </div>
-            {% endfor %}
+        
+          <div class="form-group col-md-6 d-flex align-items-end justify-content-end">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
           </div>
-        </div>
-      
-        <div class="text-right">
-          <button type="submit" class="btn btn-primary">Save Changes</button>
-        </div>
+        </div>        
       
       </form>
       

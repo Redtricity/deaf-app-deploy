@@ -1,4 +1,3 @@
-/* Navbar css */
 .navbar-top,
 .navbar-second {
   position: fixed;
@@ -11,22 +10,22 @@
   background-color: transparent !important; 
 }
 
-/* Default link style */
+
 .nav-link {
   color: #000; 
   text-decoration: none;
   transition: color 0.2s ease; 
 }
 
-/* Hover */
+
 .nav-link:hover {
   color: #000; 
   text-decoration: none; 
 }
 
-/* Active link  */
+
 .nav-link.active {
-  color: #007bff !important;        /* bootstrap primary blue*/
-  border-bottom: 2px solid #007bff !important; /* underline */
+  color: #007bff !important;        
+  border-bottom: 2px solid #007bff !important;
 }
 
