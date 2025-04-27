@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-oai^lj%31m0w^z5+h_%o-4sqb=kb_44)s6c0z6w=zs7c4t3%ta'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'deaf-app-deploy.onrender.com',
