@@ -18,10 +18,11 @@
 
         <div class="d-flex align-items-center mb-4">
           <div class="position-relative">
-            <img id="preview-img" 
-     src="{{ user.profile.profile_picture.url if user.profile.profile_picture else '/static/default_user.jpg' }}" 
-     alt="Profile picture" 
-     class="rounded-circle profile-img-preview">
+            {% if user.profile.profile_picture %}
+              <img id="preview-img" src="{{ user.profile.profile_picture.url }}" alt="Profile picture" class="rounded-circle profile-img-preview">
+            {% else %}
+              <img id="preview-img" src="{% static 'images/default_user.jpg' %}" alt="Default profile picture" class="rounded-circle profile-img-preview">
+            {% endif %}
             <input type="file" name="profile_picture" id="id_profile_picture" class="profile-pic-input">
           </div>
           
@@ -31,6 +32,7 @@
             <small class="text-muted">Member since {{ user.date_joined|date:"F Y" }}</small>
           </div>
         </div>
+        
 
         <div class="form-row">
           <div class="form-group col-md-6">

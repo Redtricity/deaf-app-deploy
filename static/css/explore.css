@@ -12,6 +12,7 @@ html, body {
   flex-shrink: 0;
   max-width: 40px; 
   max-height: 40px; 
+  display: block;
 }
 
 
