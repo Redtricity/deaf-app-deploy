@@ -23,6 +23,7 @@ from .views import mycommunity
 from django.conf import settings
 from django.conf.urls.static import static
 from .views import create_community
+from django.conf.urls.static import static
 
 
 
@@ -44,8 +45,4 @@ urlpatterns = [
     path('comment/<int:comment_id>/edit/', views.edit_comment, name='edit_comment'),
     path('comment/<int:comment_id>/delete/', views.delete_comment, name='delete_comment'),
     path('post/<int:post_id>/delete/', views.delete_post, name='delete_post'),
-]
-
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -14,27 +14,27 @@
 
     <!-- Left collum-->
     <div class="col-md-3 d-flex flex-column">
-      <div class="small-box hover-sign bg-white rounded shadow-sm p-3 mb-3 flex-grow-1" style="height: 700px !important; " data-video="https://lara-bsl-videos.s3.eu-north-1.amazonaws.com/videos/MyCommunities.mp4">
+      <div class="small-box hover-sign bg-white rounded shadow-sm p-3 mb-3 flex-grow-1" style="height: 450px; " data-video="https://lara-bsl-videos.s3.eu-north-1.amazonaws.com/videos/MyCommunities.mp4">
         <h5>My Communities</h5>
         <div class="scrollable-community-list">
           {% if joined_communities %}
             {% for community in joined_communities %}
-              <div class="community-mini-card d-flex gap-2 align-items-center mb-2">
-                {% if community.image %}
-                  <img src="{{ community.image.url }}" alt="{{ community.name }}" class="community-mini-image">
-                {% else %}
-                  <img src="{% static 'images/default_user.jpg' %}" alt="default" class="community-mini-image">
-                {% endif %}
-                <div>
-                  <small class="text-uppercase text-muted fw-bold">{{ community.is_public|yesno:"Public,Private" }}</small><br>
-                  <strong>
-                    <a href="{% url 'community_detail' community.id %}" class="text-decoration-none text-dark">
-                      {{ community.name }}
-                    </a>
-                  </strong><br>                  
-                  <small class="text-muted">{{ community.members.count }} Members</small>
-                </div>
+            <div class="community-mini-card d-flex gap-2 align-items-center mb-2">
+              {% if community.image %}
+                <img src="{{ community.image.url }}" alt="{{ community.name }}" class="community-mini-image">
+              {% else %}
+                <img src="{% static 'images/default_user.jpg' %}" alt="default" class="community-mini-image">
+              {% endif %}
+              <div>
+                <small class="text-uppercase text-muted fw-bold">{{ community.is_public|yesno:"Public,Private" }}</small><br>
+                <strong>
+                  <a href="{% url 'community_detail' community.id %}" class="text-decoration-none text-dark">
+                    {{ community.name }}
+                  </a>
+                </strong><br>                  
+                <small class="text-muted">{{ community.members.count }} Members</small>
               </div>
+            </div>            
             {% endfor %}
           {% else %}
             <p class="text-muted">You haven’t joined any communities.</p>

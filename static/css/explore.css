@@ -7,10 +7,13 @@ html, body {
 .community-mini-image {
   width: 40px;
   height: 40px;
-  border-radius: 8px;
-  object-fit: cover;
+  border-radius: 8px; 
+  object-fit: cover; 
   flex-shrink: 0;
+  max-width: 40px; 
+  max-height: 40px; 
 }
+
 
 .main-feed {
   background-color: #f8f9fa;

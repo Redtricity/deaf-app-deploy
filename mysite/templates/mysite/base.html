@@ -55,27 +55,23 @@
     </nav>
 
     <!-- 2nd bar -->
-  <nav class="navbar navbar-light bg-white border-bottom mt-auto" style="padding-top: 20px; padding-bottom: 0px;">
-    <div class="container-fluid d-flex align-items-end">
+    <nav class="navbar navbar-light bg-white border-bottom mt-auto" style="padding-top: 20px; padding-bottom: 0px;">
+      <div class="container-fluid d-flex align-items-end">
         <ul class="navbar-nav flex-row">
-            <li class="nav-item mx-3">
-                <a class="nav-link 
-                  {% if request.resolver_match.url_name == 'explore' %}active{% endif %}" 
-                  href="{% url 'explore' %}">
-                  Explore
-                </a>
-            </li>
-            <li class="nav-item mx-3">
-                <a class="nav-link 
-                  {% if request.resolver_match.url_name == 'mycommunity' %}active{% endif %}" 
-                  href="{% url 'mycommunity' %}">
-                  My Community
-                </a>
-            </li>
+          <li class="nav-item mx-3">
+            <a class="nav-link {% if request.path == '/explore/' %}active{% endif %}" href="{% url 'explore' %}">
+              Explore
+            </a>
+          </li>
+          <li class="nav-item mx-3">
+            <a class="nav-link {% if request.path == '/mycommunity/' %}active{% endif %}" href="{% url 'mycommunity' %}">
+              My Community
+            </a>
+          </li>
         </ul>
-    </div>
-  </nav>
-
+      </div>
+    </nav>
+    
   <!-- Main stuff area -->
   <div class="container-fluid mt-4">
     {% block content %}

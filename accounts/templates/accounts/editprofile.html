@@ -18,7 +18,10 @@
 
         <div class="d-flex align-items-center mb-4">
           <div class="position-relative">
-            <img id="preview-img" src="{{ user.profile.profile_picture.url }}" alt="Profile picture" class="rounded-circle profile-img-preview">
+            <img id="preview-img" 
+     src="{{ user.profile.profile_picture.url if user.profile.profile_picture else '/static/default_user.jpg' }}" 
+     alt="Profile picture" 
+     class="rounded-circle profile-img-preview">
             <input type="file" name="profile_picture" id="id_profile_picture" class="profile-pic-input">
           </div>
           
