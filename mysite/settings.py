@@ -30,11 +30,13 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'deaf-app-deploy-production.up.railway.app',  
     'deaf-app-deploy-production-c70d.up.railway.app',  
+]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://deaf-app-deploy-production.up.railway.app',  
     'https://deaf-app-deploy-production-c70d.up.railway.app',  
 ]
+
 
 
 # Application definition
